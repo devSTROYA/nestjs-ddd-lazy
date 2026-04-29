@@ -1,17 +1,17 @@
-# NestJS Todo (DDD + CQRS)
+# Typescript Clean Architecture (NestJS + DDD + Functional Programming Style)
 
 A TypeScript [NestJS](https://nestjs.com/) API that models todos and users with **Domain-Driven Design** boundaries: domain rules stay in `domain/`, use cases in `application/`, HTTP and DTOs in `presentation/`, and persistence in `infrastructure/`. **CQRS** (`@nestjs/cqrs`) routes each operation through explicit commands and queries, and **functional-style** `Result` / `Option` types plus `match` keep success and failure explicit until the HTTP layer maps them to status codes.
 
 ## Architecture
 
-| Layer | Path alias | Role |
-|--------|------------|------|
-| **Domain** | `@domain/*` | Aggregates, value objects, domain errors, port interfaces (e.g. `TodoRepository`, `UserRepository`) |
-| **Application** | `@application/*` | Command/query handlers; orchestration; returns `Result` to callers |
-| **Infrastructure** | `@infrastructure/*` | Adapters implementing domain ports (currently **in-memory** stores) |
-| **Presentation** | `@presentation/*` | Controllers, request/response DTOs, HTTP ↔ domain mapping |
-| **Core** | `@core/*` | Shared DDD primitives (`AggregateRoot`, `Repository`, value object base), `Result` / `Option` / `match`, application error types |
-| **Common** | `@common/*` | NestJS integration: global `HttpException` filter, JWT `AuthGuard`, `CurrentUser`, shared types (`UserContext`, `JwtClaims`) |
+| Layer              | Path alias          | Role                                                                                                                             |
+| ------------------ | ------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| **Domain**         | `@domain/*`         | Aggregates, value objects, domain errors, port interfaces (e.g. `TodoRepository`, `UserRepository`)                              |
+| **Application**    | `@application/*`    | Command/query handlers; orchestration; returns `Result` to callers                                                               |
+| **Infrastructure** | `@infrastructure/*` | Adapters implementing domain ports (currently **in-memory** stores)                                                              |
+| **Presentation**   | `@presentation/*`   | Controllers, request/response DTOs, HTTP ↔ domain mapping                                                                        |
+| **Core**           | `@core/*`           | Shared DDD primitives (`AggregateRoot`, `Repository`, value object base), `Result` / `Option` / `match`, application error types |
+| **Common**         | `@common/*`         | NestJS integration: global `HttpException` filter, JWT `AuthGuard`, `CurrentUser`, shared types (`UserContext`, `JwtClaims`)     |
 
 Path aliases are defined in `tsconfig.json` (`@application`, `@common`, `@core`, `@domain`, `@infrastructure`, `@presentation`).
 
@@ -41,9 +41,9 @@ Handlers return `Result` (or types built from it). Controllers use `match.fromRe
 
 Set at least:
 
-| Variable | Purpose |
-|----------|---------|
-| `JWT_SECRET` | Signing key for access tokens |
+| Variable              | Purpose                              |
+| --------------------- | ------------------------------------ |
+| `JWT_SECRET`          | Signing key for access tokens        |
 | `JWT_EXPIRATION_TIME` | JWT `expiresIn` (e.g. `1d`, `3600s`) |
 
 The app listens on **`PORT`** (default **8080**).
